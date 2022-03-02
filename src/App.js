@@ -14,6 +14,9 @@ const App = () => {
   const [startGame, setStartGame] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [endGame, setEndGame] = useState(false)
+  const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [correctAnswer, setCorrectAnswer] = useState(null)
+  const [gameScore, setGameScore] = useState(0)
 
   const startQuiz = async () => {
     const res = await fetch(
@@ -27,9 +30,8 @@ const App = () => {
       question: results[0].question,
       answers: shuffle(results[0]),
     })
-
+    setCorrectAnswer(results[0].correct_answer)
     setLoaded(true)
-    console.log(results)
   }
   const navigateNextQuiz = () => {
     //make sure you are in last question
@@ -37,11 +39,22 @@ const App = () => {
     if (isLastQuestion) {
       setEndGame(true)
     } else {
-      setSelectedQuestionIndex((prevIndex) => prevIndex + 1)
+      const currenIndex = selectedQuestionIndex + 1
+      setSelectedQuestionIndex(currenIndex)
       setSelectedQuestion({
-        question: quizzes[selectedQuestionIndex].question,
-        answers: shuffle(quizzes[selectedQuestionIndex]),
+        question: quizzes[currenIndex].question,
+        answers: shuffle(quizzes[currenIndex]),
       })
+      setCorrectAnswer(quizzes[currenIndex].correct_answer)
+      setSelectedAnswer(null)
+    }
+  }
+
+  const selectAnswer = (answer) => {
+    setSelectedAnswer(answer)
+    //comparing user selected Answer with correctAnswer
+    if (answer === correctAnswer) {
+      setGameScore((prevScore) => prevScore + 1)
     }
   }
 
@@ -52,14 +65,20 @@ const App = () => {
     setEndGame(false)
     setLoaded(false)
     setStartGame(false)
+    setGameScore(0)
   }
 
   return (
-    <div>
-      {endGame && <GameOver resetQuiz={resetQuiz} />}
+    <div className='container'>
+      {endGame && <GameOver resetQuiz={resetQuiz} gameScore={gameScore} />}
       {startGame && loaded && !endGame && (
         <QuizCard
           selectedQuestion={selectedQuestion}
+          selectAnswer={selectAnswer}
+          selectedAnswer={selectedAnswer}
+          correctAnswer={correctAnswer}
+          quizzes={quizzes}
+          selectedQuestionIndex={selectedQuestionIndex}
           navigateNextQuiz={navigateNextQuiz}
         />
       )}

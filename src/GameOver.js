@@ -1,7 +1,7 @@
-const GameOver = ({ resetQuiz }) => {
+const GameOver = ({ resetQuiz, gameScore }) => {
   return (
     <div>
-      Total Score 8 GameOver
+      <p> Total Score {gameScore} </p>
       <button onClick={resetQuiz}>Reset Quiz</button>
     </div>
   )

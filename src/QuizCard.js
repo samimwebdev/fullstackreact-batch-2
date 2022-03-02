@@ -1,16 +1,33 @@
 import AnswerCard from './AnswerCard'
 
-const QuizCard = ({ selectedQuestion, navigateNextQuiz }) => {
+const QuizCard = ({
+  selectedQuestion,
+  navigateNextQuiz,
+  selectAnswer,
+  selectedAnswer,
+  correctAnswer,
+  selectedQuestionIndex,
+  quizzes,
+}) => {
   console.log(selectedQuestion)
   const { question, answers } = selectedQuestion
   const navigateNext = () => {
     navigateNextQuiz()
   }
   return (
-    <div>
+    <div className='question-card'>
+      <p>
+        Question:{selectedQuestionIndex + 1}/ {quizzes.length}
+      </p>
       <h2>{question}</h2>
       {answers.map((answer, i) => (
-        <AnswerCard key={i} answer={answer} />
+        <AnswerCard
+          key={i}
+          answer={answer}
+          selectAnswer={selectAnswer}
+          selectedAnswer={selectedAnswer}
+          correctAnswer={correctAnswer}
+        />
       ))}
       <button onClick={navigateNext}>Next Question</button>
     </div>
