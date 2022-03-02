@@ -1,64 +1,69 @@
 import { useState } from 'react'
-import CardNum from './CardNum'
-
-import OddOrEven from './OddOrEven'
+import GameOver from './GameOver'
+import QuizCard from './QuizCard'
 import './style.css'
-
-//render cycle
-//every state up date re-render the UI
-//props update-  re-render the UI
-//manually forced update- re-render the UI
+import shuffle from './utils'
+//button - question and answer- selecting answer- write or wrong answer - total number
+// single select answer
+//reset quiz
 
 const App = () => {
-  const [count, setCount] = useState(0)
-  const randomCards = [30, 33, 37, 42]
-  // const [randomCards, setRandomCards] = useState()
-  const [pickedNum, setPickedNum] = useState(null)
-  // count -{value: 0}
+  const [quizzes, setQuizzes] = useState(null)
+  const [selectedQuestion, setSelectedQuestion] = useState(null)
+  const [selectedQuestionIndex, setSelectedQuestionIndex] = useState(0)
+  const [startGame, setStartGame] = useState(false)
+  const [loaded, setLoaded] = useState(false)
+  const [endGame, setEndGame] = useState(false)
 
-  // setCount(10)
-  //state - hooks
-  //count++  count = count + 1
+  const startQuiz = async () => {
+    const res = await fetch(
+      'https://opentdb.com/api.php?amount=10&category=27&difficulty=easy&type=multiple'
+    )
+    const { results } = await res.json()
+    setQuizzes(results)
+    setStartGame(true)
 
-  const incrementCount = () => {
-    // setCount(count + 1)
-    setCount((prevCount) => prevCount + 1)
+    setSelectedQuestion({
+      question: results[0].question,
+      answers: shuffle(results[0]),
+    })
+
+    setLoaded(true)
+    console.log(results)
+  }
+  const navigateNextQuiz = () => {
+    //make sure you are in last question
+    const isLastQuestion = quizzes.length - 1 === selectedQuestionIndex
+    if (isLastQuestion) {
+      setEndGame(true)
+    } else {
+      setSelectedQuestionIndex((prevIndex) => prevIndex + 1)
+      setSelectedQuestion({
+        question: quizzes[selectedQuestionIndex].question,
+        answers: shuffle(quizzes[selectedQuestionIndex]),
+      })
+    }
   }
 
-  const decrementCount = () => {
-    // setCount(count - 1)
-    // setCount(() => {
-    //   return count - 1
-    // })
-    setCount(() => count - 1)
-  }
-
-  const resetCount = () => {
-    setCount(0)
-  }
-
-  const pickedValueAlt = (cardNum) => {
-    setPickedNum(cardNum)
+  const resetQuiz = () => {
+    setQuizzes(null)
+    setSelectedQuestion(null)
+    setSelectedQuestionIndex(0)
+    setEndGame(false)
+    setLoaded(false)
+    setStartGame(false)
   }
 
   return (
-    <div className='app'>
-      <p>Count: {count}</p>
-      <button onClick={incrementCount}>Increment</button>
-      <button onClick={decrementCount}>Decrement</button>
-      <button onClick={resetCount}>Reset</button>
-      {/* <OddOrEven count={count} /> */}
-      <OddOrEven count={count} pickedNum={pickedNum} />
-      {randomCards.map((cardValue, index) => {
-        return (
-          <CardNum
-            key={cardValue}
-            cardValue={cardValue}
-            setPickedNum={setPickedNum}
-            pickedValueAlt={pickedValueAlt}
-          />
-        )
-      })}
+    <div>
+      {endGame && <GameOver resetQuiz={resetQuiz} />}
+      {startGame && loaded && !endGame && (
+        <QuizCard
+          selectedQuestion={selectedQuestion}
+          navigateNextQuiz={navigateNextQuiz}
+        />
+      )}
+      {!startGame && <button onClick={startQuiz}>Start Quiz</button>}
     </div>
   )
 }
