@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CardNum from './CardNum'
 
 import OddOrEven from './OddOrEven'
@@ -14,6 +14,22 @@ const App = () => {
   const randomCards = [30, 33, 37, 42]
   // const [randomCards, setRandomCards] = useState()
   const [pickedNum, setPickedNum] = useState(null)
+  // continuously running process without dependency
+  // [] initial Mount
+  // [dependency] when dependency change useEffect hooks will call again
+  useEffect(() => {
+    console.log('calling')
+  }, [count])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      console.log('calling')
+    }, 2000)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [])
   // count -{value: 0}
 
   // setCount(10)
