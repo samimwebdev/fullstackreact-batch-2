@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import GameOver from './GameOver'
 import QuizCard from './QuizCard'
 import './style.css'
@@ -33,6 +33,10 @@ const App = () => {
     setCorrectAnswer(results[0].correct_answer)
     setLoaded(true)
   }
+  useEffect(() => {
+    startQuiz()
+  }, [])
+
   const navigateNextQuiz = () => {
     //make sure you are in last question
     const isLastQuestion = quizzes.length - 1 === selectedQuestionIndex
