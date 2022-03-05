@@ -14,7 +14,7 @@ const App = () => {
   const [startGame, setStartGame] = useState(false)
   const [loaded, setLoaded] = useState(false)
   const [endGame, setEndGame] = useState(false)
-  const [selectedAnswer, setSelectedAnswer] = useState(null)
+  const [pickedAnswer, setPickedAnswer] = useState(null)
   const [correctAnswer, setCorrectAnswer] = useState(null)
   const [gameScore, setGameScore] = useState(0)
 
@@ -50,12 +50,12 @@ const App = () => {
         answers: shuffle(quizzes[currenIndex]),
       })
       setCorrectAnswer(quizzes[currenIndex].correct_answer)
-      setSelectedAnswer(null)
+      setPickedAnswer(null)
     }
   }
 
   const selectAnswer = (answer) => {
-    setSelectedAnswer(answer)
+    setPickedAnswer(answer)
     //comparing user selected Answer with correctAnswer
     if (answer === correctAnswer) {
       setGameScore((prevScore) => prevScore + 1)
@@ -79,7 +79,7 @@ const App = () => {
         <QuizCard
           selectedQuestion={selectedQuestion}
           selectAnswer={selectAnswer}
-          selectedAnswer={selectedAnswer}
+          selectedAnswer={pickedAnswer}
           correctAnswer={correctAnswer}
           quizzes={quizzes}
           selectedQuestionIndex={selectedQuestionIndex}

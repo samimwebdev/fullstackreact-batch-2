@@ -4,7 +4,7 @@ const QuizCard = ({
   selectedQuestion,
   navigateNextQuiz,
   selectAnswer,
-  selectedAnswer,
+  pickedAnswer,
   correctAnswer,
   selectedQuestionIndex,
   quizzes,
@@ -25,7 +25,7 @@ const QuizCard = ({
           key={i}
           answer={answer}
           selectAnswer={selectAnswer}
-          selectedAnswer={selectedAnswer}
+          pickedAnswer={pickedAnswer}
           correctAnswer={correctAnswer}
         />
       ))}
