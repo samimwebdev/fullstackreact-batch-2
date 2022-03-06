@@ -34,9 +34,12 @@ class CardNumClass extends React.Component {
   }
 
   componentWillUnmount() {
-    // clearInterval(this.timer)
     //clean up the component
-    // stop the complete running process
+    // removing event listeners you added in componentDidMount (or elsewhere)
+    // cancelling active network requests
+    // invalidating timers
+    // cleaning up DOM elements that you created in componentDidMount
+    // clearInterval(this.timer)
     console.log('componentWillUnmount')
   }
   render() {
