@@ -13,8 +13,8 @@ class CardNumClass extends React.Component {
 
   static getDerivedStateFromProps(props, state) {
     console.log('getDerivedStateFromProps')
-    console.log('state', state)
     console.log('props', props)
+    console.log('state', state)
     return {
       cardNum: props.number,
     }
@@ -35,6 +35,8 @@ class CardNumClass extends React.Component {
 
   componentWillUnmount() {
     // clearInterval(this.timer)
+    //clean up the component
+    // stop the complete running process
     console.log('componentWillUnmount')
   }
   render() {

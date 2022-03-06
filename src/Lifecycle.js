@@ -4,9 +4,9 @@ import OddOrEvenClass from './OddOrEvenClass'
 
 class Lifecycle extends React.Component {
   constructor(props) {
-    console.log('constructor')
     // initiate state
     //function binding
+    console.log('constructor')
     super(props)
     this.incrementCount = this.incrementCount.bind(this)
     this.decrementCount = this.decrementCount.bind(this)
@@ -20,30 +20,45 @@ class Lifecycle extends React.Component {
   }
 
   static getDerivedStateFromProps(state, props) {
+    //when this component state depends on parent props
+    //you can update the component state from parent props
+    //you can return the updated state from here
+    //otherwise you can must return null
     console.log('getDerivedStateFromProps')
     return null
-    //when component state depends on parent props
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    //either return true or false
+    //If you return true component lifecyle flow (render-rerendering) will be maintained
+    //otherwise if it is false, No re-render will be happened
+    //use for performance optimization
+    //you can manually control the re-render of the component based on some condition
+    //pureComponent use is recommended instead  of this
     console.log(nextProps, nextState)
     console.log('shouldComponentUpdate')
     return true
   }
   getSnapshotBeforeUpdate(prevProps, prevState) {
+    //receiving snapshot before updating the DOM
+    //calculate some values from expected future DOM updates
+    //return snapshots which will be received as snapshot in componentDidUpdate
+    //you won't update state directly in this lifecycle method
     console.log('getSnapshotBeforeUpdate')
     return 'Hi'
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    //calling on updated DOM
     //3rd party API call on update stage
+    // update scroll position based on snapshot
     console.log(prevProps, prevState, snapshot)
     console.log('componentDidUpdate')
   }
 
   componentDidMount() {
-    console.log('componentDidMount')
     //3rd party API call
+    console.log('componentDidMount')
   }
 
   incrementCount() {
